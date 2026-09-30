@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your cart · Northwind Supply</title>
+  <meta name="description" content="Review the items in your Northwind Supply cart.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/brand-mark.svg" alt="" width="28" height="28">
+        Northwind Supply
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html">Shop</a></li>
+          <li>
+            <a class="cart-link" href="cart.html" aria-current="page">
+              <img class="cart-link__icon" src="assets/icons/cart.svg" alt="" width="20" height="20">
+              <span>Cart</span>
+              <span class="cart-count" data-cart-count aria-hidden="true">0</span>
+              <span class="visually-hidden">, </span>
+              <span class="visually-hidden" data-cart-count-label>0 items</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="container">
+
+      <header class="page-head">
+        <h1>Your cart</h1>
+        <p class="muted" id="cart-summary-line"></p>
+      </header>
+
+      <!-- Quantity steppers change the input programmatically, which screen
+           readers do not announce on their own, so each change is echoed here.
+           Kept separate from the toast: one region per kind of event means no
+           double announcements. -->
+      <p class="visually-hidden" role="status" id="cart-status"></p>
+
+      <div id="cart-root"></div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Northwind Supply — a demo storefront.</p>
+      <p>Static prototype · no orders are processed.</p>
+    </div>
+  </footer>
+
+  <p class="toast" role="status"></p>
+
+  <!-- ======================================================================
+       Markup templates. Inert until cloned, which keeps the table/figure
+       structure readable here rather than buried in a JS string.
+       ====================================================================== -->
+
+  <template id="cart-layout-template">
+    <div class="cart-layout">
+      <div class="cart-table-wrap" role="region" aria-labelledby="cart-caption" tabindex="0">
+        <table class="cart-table">
+          <caption id="cart-caption">Items in your cart</caption>
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col" class="cart-col--num">Unit price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col" class="cart-col--num">Total</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </template>
+
+  <template id="cart-row-template">
+    <tr>
+      <th scope="row" class="cart-row__product">
+        <img class="cart-row__thumb" alt="" width="800" height="600" decoding="async">
+        <a href=""></a>
+      </th>
+      <td class="cart-col--num" data-cell="unit"></td>
+      <td>
+        <div class="qty">
+          <button type="button" data-step="-1" data-qty-id="">−</button>
+          <label class="visually-hidden"></label>
+          <input type="number" value="1" min="1" step="1" inputmode="numeric">
+          <button type="button" data-step="1" data-qty-id="">+</button>
+        </div>
+      </td>
+      <td class="cart-col--num cart-row__total" data-cell="line-total"></td>
+      <td>
+        <button type="button" class="btn--link cart-row__remove" data-remove="">Remove<span class="visually-hidden"></span></button>
+      </td>
+    </tr>
+  </template>
+
+  <template id="cart-summary-template">
+    <aside class="summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Order summary</h2>
+      <dl class="summary__list">
+        <div class="summary__row"><dt>Subtotal</dt><dd data-cell="subtotal"></dd></div>
+        <div class="summary__row"><dt>Shipping</dt><dd data-cell="shipping"></dd></div>
+        <div class="summary__row summary__row--total"><dt>Total</dt><dd data-cell="total"></dd></div>
+      </dl>
+      <button type="button" class="btn btn--primary btn--block" data-action="checkout">Checkout</button>
+      <button type="button" class="btn--link" data-action="clear">Clear cart</button>
+      <p class="note" data-cell="note"></p>
+    </aside>
+  </template>
+
+  <template id="cart-empty-template">
+    <div class="empty-state">
+      <h2 id="empty-heading" tabindex="-1">Your cart is empty</h2>
+      <p>Nothing here yet — browse the catalogue and add something you like.</p>
+      <a class="btn btn--primary" href="index.html">Start shopping</a>
+    </div>
+  </template>
+
+  <script src="js/store.js"></script>
+  <script>
+    (function () {
+      var root = document.getElementById('cart-root');
+      var summaryLine = document.getElementById('cart-summary-line');
+      var status = document.getElementById('cart-status');
+
+      var layoutTemplate = document.getElementById('cart-layout-template');
+      var rowTemplate = document.getElementById('cart-row-template');
+      var summaryTemplate = document.getElementById('cart-summary-template');
+      var emptyTemplate = document.getElementById('cart-empty-template');
+
+      /* ---------- helpers ---------- */
+
+      function findLine(id) {
+        var lines = cart.lines();
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].id === id) return lines[i];
+        }
+        return null;
+      }
+
+      function indexOfLine(id) {
+        var lines = cart.lines();
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].id === id) return i;
+        }
+        return 0;
+      }
+
+      function setCell(name, text) {
+        var el = root.querySelector('[data-cell="' + name + '"]');
+        if (el) el.textContent = text;
+      }
+
+      function noteText(subtotal, shipping) {
+        if (shipping === 0) {
+          return 'Shipping is free on orders over ' + formatPrice(FREE_SHIPPING_FROM) + '.';
+        }
+        return 'Add ' + formatPrice(FREE_SHIPPING_FROM - subtotal) + ' more for free shipping.';
+      }
+
+      function announceLine(id) {
+        var line = findLine(id);
+        if (!line) return;
+        status.textContent = line.product.name + ' quantity ' + line.qty +
+          '. Cart total ' + formatPrice(cart.total()) + '.';
+      }
+
+      /* ---------- building rows ---------- */
+
+      function buildRow(line) {
+        var product = line.product;
+        var tr = rowTemplate.content.cloneNode(true).querySelector('tr');
+
+        var thumb = tr.querySelector('.cart-row__thumb');
+        thumb.src = product.image;   // alt is already "" — the link names the product
+
+        var link = tr.querySelector('.cart-row__product a');
+        link.href = 'product.html?id=' + encodeURIComponent(line.id);
+        link.textContent = product.name;
+
+        tr.querySelector('[data-cell="unit"]').textContent = formatPrice(product.price);
+
+        var input = tr.querySelector('input');
+        input.id = 'qty-' + line.id;
+        input.max = String(product.stock);
+        input.dataset.qtyInput = line.id;
+
+        var label = tr.querySelector('label');
+        label.htmlFor = input.id;
+        label.textContent = 'Quantity of ' + product.name;
+
+        var steppers = tr.querySelectorAll('[data-step]');
+        steppers[0].dataset.qtyId = line.id;
+        steppers[0].setAttribute('aria-label', 'Decrease quantity of ' + product.name);
+        steppers[1].dataset.qtyId = line.id;
+        steppers[1].setAttribute('aria-label', 'Increase quantity of ' + product.name);
+
+        var remove = tr.querySelector('[data-remove]');
+        remove.dataset.remove = line.id;
+        remove.querySelector('.visually-hidden').textContent = ' ' + product.name + ' from cart';
+
+        return tr;
+      }
+
+      /* ---------- in-place updates ----------
+         Quantity edits never add or remove a row, so they update the existing
+         nodes instead of re-rendering. Nothing is destroyed, which means focus
+         is never disturbed and a stepper can be pressed repeatedly. */
+
+      function updateLine(id) {
+        var line = findLine(id);
+        if (!line) return;
+
+        var input = document.getElementById('qty-' + id);
+        if (!input) return;
+        var row = input.closest('tr');
+
+        input.value = String(line.qty);
+        row.querySelector('[data-cell="line-total"]').textContent = formatPrice(line.lineTotal);
+
+        // The steppers bottom out at 1 rather than removing the line — deleting
+        // an item is the Remove button's job, so no keypress can do it by accident.
+        row.querySelector('[data-step="-1"]').disabled = line.qty <= 1;
+        row.querySelector('[data-step="1"]').disabled = line.qty >= line.product.stock;
+      }
+
+      function updateSummary() {
+        var subtotal = cart.subtotal();
+        var shipping = cart.shipping();
+        var count = cart.count();
+
+        summaryLine.textContent = count + (count === 1 ? ' item' : ' items') + ' in your cart';
+        setCell('subtotal', formatPrice(subtotal));
+        setCell('shipping', shipping === 0 ? 'Free' : formatPrice(shipping));
+        setCell('total', formatPrice(subtotal + shipping));
+        setCell('note', noteText(subtotal, shipping));
+      }
+
+      /* ---------- full render ----------
+         Only for changes to the set of lines. `focusSpec` says where focus
+         should land afterwards so it is never dropped to <body>. */
+
+      function render(focusSpec) {
+        var lines = cart.lines();
+
+        root.textContent = '';
+
+        if (lines.length === 0) {
+          summaryLine.textContent = '';
+          root.appendChild(emptyTemplate.content.cloneNode(true));
+          applyFocus(focusSpec);
+          return;
+        }
+
+        var layout = layoutTemplate.content.cloneNode(true);
+        var tbody = layout.querySelector('tbody');
+
+        lines.forEach(function (line) {
+          tbody.appendChild(buildRow(line));
+        });
+
+        layout.querySelector('.cart-layout').appendChild(summaryTemplate.content.cloneNode(true));
+        root.appendChild(layout);
+
+        lines.forEach(function (line) {
+          updateLine(line.id);
+        });
+        updateSummary();
+
+        applyFocus(focusSpec);
+      }
+
+      function applyFocus(spec) {
+        if (!spec) return;   // first paint: never steal focus on load
+
+        var target = null;
+
+        if (spec.kind === 'qty') {
+          target = document.getElementById('qty-' + spec.id);
+        } else if (spec.kind === 'remove') {
+          var buttons = root.querySelectorAll('[data-remove]');
+          if (buttons.length) target = buttons[Math.min(spec.index, buttons.length - 1)];
+        }
+
+        // Ordering is preserved, so a plain "same index" fallback keeps focus
+        // near where the user was.
+        if (!target) {
+          target = root.querySelector('[data-qty-input]') ||
+                   root.querySelector('[data-remove]') ||
+                   document.getElementById('empty-heading');
+        }
+
+        if (target) target.focus();
+      }
+
+      /* ---------- events ---------- */
+
+      root.addEventListener('click', function (event) {
+        var step = event.target.closest('[data-step]');
+        if (step && step.dataset.qtyId) {
+          var stepId = step.dataset.qtyId;
+          var field = document.getElementById('qty-' + stepId);
+
+          cart.setQty(stepId, (parseInt(field.value, 10) || 1) + Number(step.dataset.step));
+          updateLine(stepId);
+          updateSummary();
+          announceLine(stepId);
+          // Focus stays on the button that was pressed, so pressing again works.
+          return;
+        }
+
+        var removeButton = event.target.closest('[data-remove]');
+        if (removeButton && removeButton.dataset.remove) {
+          var removeId = removeButton.dataset.remove;
+          var removed = getProduct(removeId);
+          var index = indexOfLine(removeId);
+
+          cart.remove(removeId);
+          render({ kind: 'remove', index: index });
+          toast(removed.name + ' removed from cart.');
+          return;
+        }
+
+        if (event.target.closest('[data-action="clear"]')) {
+          cart.clear();
+          render({ kind: 'empty' });
+          toast('Cart cleared.');
+          return;
+        }
+
+        if (event.target.closest('[data-action="checkout"]')) {
+          toast('Checkout is not implemented in this prototype.');
+        }
+      });
+
+      root.addEventListener('change', function (event) {
+        var field = event.target.closest('[data-qty-input]');
+        if (!field) return;
+
+        var id = field.dataset.qtyInput;
+        var typed = parseInt(field.value, 10) || 0;
+
+        if (typed < 1) {
+          // Clearing the field, or typing 0, is an explicit request to remove
+          // the line, so moving focus to the next row is expected.
+          var product = getProduct(id);
+          var index = indexOfLine(id);
+
+          cart.remove(id);
+          render({ kind: 'remove', index: index });
+          toast(product.name + ' removed from cart.');
+          return;
+        }
+
+        cart.setQty(id, typed);
+        updateLine(id);
+        updateSummary();
+        announceLine(id);
+      });
+
+      /* Nothing is rendered with focus, so the first paint passes null. */
+      render(null);
+    })();
+  </script>
+
+</body>
+</html>

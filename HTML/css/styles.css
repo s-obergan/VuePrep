@@ -1,0 +1,774 @@
+/* ==========================================================================
+   Northwind Supply — shared styles
+   Tokens first, then base, then components.
+   Accessibility affordances (focus ring, skip link, reduced motion) live here
+   rather than being bolted on per component.
+   ========================================================================== */
+
+:root {
+  /* Colour */
+  --bg: #f6f6f3;
+  --surface: #ffffff;
+  --surface-alt: #efefea;
+  --border: #dcdcd5;
+  --text: #1a1a18;
+  --text-muted: #63635c;
+  --accent: #0f7b6c;
+  --accent-hover: #0b6357;
+  --accent-soft: #e0f0ed;
+  --danger: #a92f24;
+  --on-accent: #ffffff;
+
+  /* Focus is deliberately a different hue from the accent so the ring can
+     never be mistaken for a hover or selected state. */
+  --focus: #0b4fd8;
+  --focus-glow: rgba(11, 79, 216, 0.22);
+
+  /* Space */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* Shape */
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 2px rgba(20, 20, 18, 0.06);
+  --shadow-md: 0 6px 20px rgba(20, 20, 18, 0.1);
+
+  /* Layout */
+  --maxw: 1120px;
+  --header-h: 68px;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16171a;
+    --surface: #1e2024;
+    --surface-alt: #26282d;
+    --border: #3a3d44;
+    --text: #ececea;
+    --text-muted: #a2a5ac;
+    --accent: #46c4ae;
+    --accent-hover: #63d6c1;
+    --accent-soft: #1b3a35;
+    --danger: #f08a7a;
+    --on-accent: #10221f;
+    --focus: #8fb4ff;
+    --focus-glow: rgba(143, 180, 255, 0.28);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ---------- Base ---------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.1rem); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1rem; }
+
+p { margin: 0; }
+
+ul, ol { margin: 0; padding: 0; }
+
+img { display: block; max-width: 100%; }
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+  color: inherit;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Focus --------------------------------------------------------- */
+
+/* One strong, consistent ring for everything focusable. Never removed —
+   :focus-visible keeps it off mouse clicks but on for keyboard and
+   programmatic focus. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Windows High Contrast / forced-colors mode needs a real outline colour. */
+@media (forced-colors: active) {
+  :focus-visible { outline: 3px solid Highlight; }
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--sp-2);
+  left: var(--sp-2);
+  z-index: 100;
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--focus);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ---------- Utilities ----------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--sp-5);
+}
+
+.muted { color: var(--text-muted); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Header -------------------------------------------------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface); /* fallback for browsers without color-mix() */
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  min-height: var(--header-h);
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand__mark { width: 28px; height: 28px; }
+
+.site-nav { margin-left: auto; }
+
+.site-nav ul {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding-block: var(--sp-2);
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover { color: var(--text); }
+
+.site-nav a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.cart-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.cart-link:hover { border-color: var(--accent); }
+
+.cart-link__icon { width: 20px; height: 20px; }
+
+.cart-count {
+  min-width: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Page shell ---------------------------------------------------- */
+
+.page { padding-block: var(--sp-7) var(--sp-8); }
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3) var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+
+.breadcrumbs { margin-bottom: var(--sp-5); font-size: 0.9rem; color: var(--text-muted); }
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+}
+
+.breadcrumbs li + li::before {
+  content: "/";
+  margin-right: var(--sp-2);
+  color: var(--border);
+}
+
+.breadcrumbs a:hover { color: var(--accent); text-decoration: underline; }
+
+/* ---------- Buttons ------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  padding: 10px var(--sp-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { background: var(--accent-hover); }
+
+.btn--ghost {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn--block { width: 100%; }
+
+.btn--link {
+  background: none;
+  border: 0;
+  padding: var(--sp-1) 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn--link:hover { color: var(--danger); }
+
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+/* ---------- Filters ------------------------------------------------------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-5);
+}
+
+.chip {
+  min-height: 40px;
+  padding: 6px var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+.chip[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- Product grid -------------------------------------------------- */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-5);
+  list-style: none;
+}
+
+.product-grid > li[hidden] { display: none; }
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.product-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.product-card:focus-within {
+  border-color: var(--focus);
+}
+
+.product-card__media {
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  flex: 1;
+}
+
+.product-card__cat {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.product-card__name { font-size: 1.02rem; }
+
+.product-card__name a:hover { color: var(--accent); }
+
+.product-card__tagline {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.product-card .price { margin-top: auto; padding-top: var(--sp-2); }
+
+.price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Product detail ------------------------------------------------ */
+
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: var(--sp-7);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .detail { grid-template-columns: 1fr; gap: var(--sp-5); }
+}
+
+.detail__media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.detail__tagline { color: var(--text-muted); }
+
+.detail__price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 3px var(--sp-3);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.stock { display: flex; align-items: center; gap: var(--sp-3); font-size: 0.9rem; color: var(--text-muted); }
+
+/* ---------- Form controls ------------------------------------------------- */
+
+.buy-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  align-items: flex-start;
+  padding-block: var(--sp-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.field > label {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.field__hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 22ch;
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.qty:focus-within {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px var(--focus-glow);
+}
+
+.qty button {
+  width: 42px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.qty button:hover:not([disabled]) { background: var(--surface-alt); color: var(--text); }
+
+.qty button[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.qty input {
+  width: 52px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-inline: 1px solid var(--border);
+  background: none;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+
+.qty input::-webkit-outer-spin-button,
+.qty input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* The group already shows focus, so the inner input's ring is redundant. */
+.qty input:focus-visible { outline: none; }
+
+/* ---------- Specs --------------------------------------------------------- */
+
+.specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 var(--sp-5);
+  margin: 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+.specs dt,
+.specs dd {
+  margin: 0;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.specs dt { color: var(--text-muted); }
+
+.detail__description { line-height: 1.65; }
+
+/* ---------- Cart ---------------------------------------------------------- */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--sp-6);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .cart-layout { grid-template-columns: 1fr; }
+}
+
+/* Focusable scroll container: at narrow widths the table scrolls sideways,
+   and this lets keyboard users scroll it (and labels it for screen readers). */
+.cart-table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.cart-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+}
+
+.cart-table caption {
+  padding: var(--sp-4) var(--sp-4) 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: var(--sp-4);
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-table thead th {
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.cart-table tbody tr:last-child th,
+.cart-table tbody tr:last-child td { border-bottom: 0; }
+
+.cart-row__product {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-weight: 600;
+}
+
+.cart-row__thumb {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  background: var(--surface-alt);
+}
+
+.cart-row__product a:hover { color: var(--accent); text-decoration: underline; }
+
+.cart-col--num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.cart-row__total { font-weight: 700; }
+
+.cart-row__remove { white-space: nowrap; }
+
+/* ---------- Order summary ------------------------------------------------- */
+
+.summary {
+  position: sticky;
+  top: calc(var(--header-h) + var(--sp-5));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.summary__list { margin: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+
+.summary__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  font-size: 0.94rem;
+  color: var(--text-muted);
+}
+
+.summary__row dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+.summary__row--total {
+  margin-top: var(--sp-1);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.note { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ---------- Empty state --------------------------------------------------- */
+
+.empty-state {
+  padding: var(--sp-8) var(--sp-5);
+  text-align: center;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.empty-state h2 { margin-block: var(--sp-3) var(--sp-2); }
+
+.empty-state p { color: var(--text-muted); margin-bottom: var(--sp-5); }
+
+/* ---------- Footer -------------------------------------------------------- */
+
+.site-footer {
+  padding-block: var(--sp-6);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-5);
+  justify-content: space-between;
+}
+
+/* ---------- Toast --------------------------------------------------------- */
+
+/* Permanently in the DOM so the live region exists before its text is set —
+   a live region added at the same moment as its content is often missed. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-6);
+  z-index: 50;
+  max-width: min(90vw, 46ch);
+  margin: 0;
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  font-size: 0.92rem;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, 140%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- Reduced motion ------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .product-card:hover { transform: none; }
+}

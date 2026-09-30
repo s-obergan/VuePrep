@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All products · Northwind Supply</title>
+  <meta name="description" content="Browse the Northwind Supply catalogue of homeware and everyday goods.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/brand-mark.svg" alt="" width="28" height="28">
+        Northwind Supply
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html" aria-current="page">Shop</a></li>
+          <li>
+            <a class="cart-link" href="cart.html">
+              <img class="cart-link__icon" src="assets/icons/cart.svg" alt="" width="20" height="20">
+              <span>Cart</span>
+              <span class="cart-count" data-cart-count aria-hidden="true">0</span>
+              <span class="visually-hidden">, </span>
+              <span class="visually-hidden" data-cart-count-label>0 items</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="container">
+
+      <header class="page-head">
+        <h1>All products</h1>
+        <!-- role="status" so filtering is announced, not just shown. -->
+        <p class="muted" id="result-count" role="status">8 products</p>
+      </header>
+
+      <section aria-labelledby="filter-heading">
+        <h2 class="visually-hidden" id="filter-heading">Filter by category</h2>
+        <div class="filters">
+          <button type="button" class="chip" data-filter="all" aria-pressed="true">
+            All <span class="chip__count">(8)</span>
+          </button>
+          <button type="button" class="chip" data-filter="lighting" aria-pressed="false">
+            Lighting <span class="chip__count">(1)</span>
+          </button>
+          <button type="button" class="chip" data-filter="kitchen" aria-pressed="false">
+            Kitchen <span class="chip__count">(2)</span>
+          </button>
+          <button type="button" class="chip" data-filter="textiles" aria-pressed="false">
+            Textiles <span class="chip__count">(1)</span>
+          </button>
+          <button type="button" class="chip" data-filter="garden" aria-pressed="false">
+            Garden <span class="chip__count">(1)</span>
+          </button>
+          <button type="button" class="chip" data-filter="home" aria-pressed="false">
+            Home <span class="chip__count">(1)</span>
+          </button>
+          <button type="button" class="chip" data-filter="bags" aria-pressed="false">
+            Bags <span class="chip__count">(1)</span>
+          </button>
+          <button type="button" class="chip" data-filter="stationery" aria-pressed="false">
+            Stationery <span class="chip__count">(1)</span>
+          </button>
+        </div>
+      </section>
+
+      <section aria-labelledby="products-heading">
+        <h2 class="visually-hidden" id="products-heading">Products</h2>
+
+        <ul class="product-grid" id="product-grid">
+
+          <li data-category="lighting">
+            <article class="product-card" aria-labelledby="name-aurora-desk-lamp">
+              <!-- The image only repeats the link the product name already provides,
+                   so it is decorative here and taken out of the tab order; the name
+                   link is the one keyboard users land on. -->
+              <a class="product-card__media" href="product.html?id=aurora-desk-lamp"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/aurora-desk-lamp.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Lighting</p>
+                <h3 class="product-card__name" id="name-aurora-desk-lamp">
+                  <a href="product.html?id=aurora-desk-lamp">Aurora Desk Lamp</a>
+                </h3>
+                <p class="product-card__tagline">Warm, dimmable light with a slim aluminium arm.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>79,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="aurora-desk-lamp">
+                  Add to cart<span class="visually-hidden">: Aurora Desk Lamp</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="kitchen">
+            <article class="product-card" aria-labelledby="name-nordic-ceramic-mug">
+              <a class="product-card__media" href="product.html?id=nordic-ceramic-mug"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/nordic-ceramic-mug.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Kitchen</p>
+                <h3 class="product-card__name" id="name-nordic-ceramic-mug">
+                  <a href="product.html?id=nordic-ceramic-mug">Nordic Ceramic Mug</a>
+                </h3>
+                <p class="product-card__tagline">Stoneware mug with a reactive matte glaze.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>18,50 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="nordic-ceramic-mug">
+                  Add to cart<span class="visually-hidden">: Nordic Ceramic Mug</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="textiles">
+            <article class="product-card" aria-labelledby="name-linen-throw-blanket">
+              <a class="product-card__media" href="product.html?id=linen-throw-blanket"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/linen-throw-blanket.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Textiles</p>
+                <h3 class="product-card__name" id="name-linen-throw-blanket">
+                  <a href="product.html?id=linen-throw-blanket">Washed Linen Throw</a>
+                </h3>
+                <p class="product-card__tagline">Stonewashed linen that softens with every wash.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>64,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="linen-throw-blanket">
+                  Add to cart<span class="visually-hidden">: Washed Linen Throw</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="garden">
+            <article class="product-card" aria-labelledby="name-terra-planter-set">
+              <a class="product-card__media" href="product.html?id=terra-planter-set"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/terra-planter-set.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Garden</p>
+                <h3 class="product-card__name" id="name-terra-planter-set">
+                  <a href="product.html?id=terra-planter-set">Terra Planter Set</a>
+                </h3>
+                <p class="product-card__tagline">Three stackable pots with matching saucers.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>34,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="terra-planter-set">
+                  Add to cart<span class="visually-hidden">: Terra Planter Set</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="home">
+            <article class="product-card" aria-labelledby="name-meridian-wall-clock">
+              <a class="product-card__media" href="product.html?id=meridian-wall-clock"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/meridian-wall-clock.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Home</p>
+                <h3 class="product-card__name" id="name-meridian-wall-clock">
+                  <a href="product.html?id=meridian-wall-clock">Meridian Wall Clock</a>
+                </h3>
+                <p class="product-card__tagline">Silent sweep movement, no ticking.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>52,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="meridian-wall-clock">
+                  Add to cart<span class="visually-hidden">: Meridian Wall Clock</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="bags">
+            <article class="product-card" aria-labelledby="name-canvas-weekender-bag">
+              <a class="product-card__media" href="product.html?id=canvas-weekender-bag"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/canvas-weekender-bag.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Bags</p>
+                <h3 class="product-card__name" id="name-canvas-weekender-bag">
+                  <a href="product.html?id=canvas-weekender-bag">Canvas Weekender</a>
+                </h3>
+                <p class="product-card__tagline">Waxed canvas holdall with leather handles.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>98,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="canvas-weekender-bag">
+                  Add to cart<span class="visually-hidden">: Canvas Weekender</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="kitchen">
+            <article class="product-card" aria-labelledby="name-pour-over-carafe">
+              <a class="product-card__media" href="product.html?id=pour-over-carafe"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/pour-over-carafe.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Kitchen</p>
+                <h3 class="product-card__name" id="name-pour-over-carafe">
+                  <a href="product.html?id=pour-over-carafe">Pour-Over Carafe</a>
+                </h3>
+                <p class="product-card__tagline">Borosilicate glass with a stainless filter.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>41,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="pour-over-carafe">
+                  Add to cart<span class="visually-hidden">: Pour-Over Carafe</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+          <li data-category="stationery">
+            <article class="product-card" aria-labelledby="name-field-notebook-duo">
+              <a class="product-card__media" href="product.html?id=field-notebook-duo"
+                 tabindex="-1" aria-hidden="true">
+                <img src="assets/products/field-notebook-duo.svg" alt=""
+                     width="800" height="600" loading="lazy" decoding="async">
+              </a>
+              <div class="product-card__body">
+                <p class="product-card__cat">Stationery</p>
+                <h3 class="product-card__name" id="name-field-notebook-duo">
+                  <a href="product.html?id=field-notebook-duo">Field Notebook Duo</a>
+                </h3>
+                <p class="product-card__tagline">Two pocket notebooks, dotted, 90 gsm.</p>
+                <p class="price"><span class="visually-hidden">Price: </span>14,00 €</p>
+                <button type="button" class="btn btn--primary btn--block" data-add="field-notebook-duo">
+                  Add to cart<span class="visually-hidden">: Field Notebook Duo</span>
+                </button>
+              </div>
+            </article>
+          </li>
+
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Northwind Supply — a demo storefront.</p>
+      <p>Static prototype · no orders are processed.</p>
+    </div>
+  </footer>
+
+  <p class="toast" role="status"></p>
+
+  <script src="js/store.js"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById('product-grid');
+      var filterBar = document.querySelector('.filters');
+      var resultCount = document.getElementById('result-count');
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('li[data-category]'));
+
+      function applyFilter(filter) {
+        var shown = 0;
+
+        cards.forEach(function (card) {
+          // `hidden` removes the card from the accessibility tree and tab order,
+          // so filtering cannot leave unfocusable-but-announced leftovers.
+          var match = filter === 'all' || card.dataset.category === filter;
+          card.hidden = !match;
+          if (match) shown++;
+        });
+
+        resultCount.textContent = shown + (shown === 1 ? ' product' : ' products');
+
+        var chips = filterBar.querySelectorAll('[data-filter]');
+        for (var i = 0; i < chips.length; i++) {
+          chips[i].setAttribute('aria-pressed', String(chips[i].dataset.filter === filter));
+        }
+      }
+
+      filterBar.addEventListener('click', function (event) {
+        var chip = event.target.closest('[data-filter]');
+        if (!chip) return;
+        // Focus stays on the chip: nothing here re-renders, so there is no
+        // focus to restore.
+        applyFilter(chip.dataset.filter);
+      });
+
+      grid.addEventListener('click', function (event) {
+        var button = event.target.closest('[data-add]');
+        if (!button) return;
+
+        var product = getProduct(button.dataset.add);
+        cart.add(product.id, 1);
+        toast(product.name + ' added to cart. Cart now has ' +
+              cart.count() + (cart.count() === 1 ? ' item.' : ' items.'));
+        // The add button keeps focus — pressing it repeatedly still works.
+      });
+    })();
+  </script>
+
+</body>
+</html>

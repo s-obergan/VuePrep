@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <style>
+    .bg-f { fill: #f4e9e4; }
+    .ink-f { fill: #a35f45; }
+    .ink-s { fill: none; stroke: #a35f45; stroke-linecap: round; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg-f { fill: #33231d; }
+      .ink-f { fill: #d6a88b; }
+      .ink-s { fill: none; stroke: #d6a88b; }
+    }
+  </style>
+  <rect class="bg-f" width="800" height="600"/>
+
+    <rect class="ink-f" x="280" y="330" width="240" height="56" rx="14"/>
+    <rect class="ink-f" x="295" y="268" width="210" height="56" rx="14"/>
+    <rect class="ink-f" x="310" y="206" width="180" height="56" rx="14"/>
+</svg>

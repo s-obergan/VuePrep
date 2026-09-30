@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check HTML/js/store.js)",
+      "Bash(node .verify.js)",
+      "Bash(node gen-assets.js)",
+      "Bash(node -e \"try{require.resolve\\('jsdom'\\);console.log\\('jsdom available'\\)}catch\\(e\\){console.log\\('no jsdom'\\)}\")",
+      "Bash(npm ls *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\('jsdom:', require\\('jsdom/package.json'\\).version\\)\")",
+      "Bash(node .verify-dom.js)",
+      "Bash(node -e ' *)",
+      "Bash(npx vue-tsc *)",
+      "Bash(echo \"--- typecheck exit: $? ---\")",
+      "Bash(npm view *)",
+      "Bash(grep -v '^$')",
+      "Bash(node -e \"console.log\\('typescript:', require\\('typescript/package.json'\\).version\\)\")",
+      "WebSearch",
+      "Bash(npm run *)",
+      "Bash(node -e \"console.log\\(require\\('/c/Temp/EnBW/node_modules/esbuild/package.json'\\).version\\)\")",
+      "Bash(npx vite *)",
+      "Bash(node tmp-verify/out/harness.mjs)",
+      "Bash(node out/harness.mjs)",
+      "Bash(node tmp-verify/dev-run.mjs)",
+      "Bash(node dist/harness.mjs)",
+      "Bash(grep -n \"^\\\\.\\\\|^\\\\/\\\\* ---\\\\|^@media\\\\|^\\\\[\" /c/Temp/EnBW/HTML/css/styles.css)"
+    ]
+  }
+}

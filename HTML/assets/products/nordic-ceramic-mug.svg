@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <style>
+    .bg-f { fill: #f2ece4; }
+    .ink-f { fill: #8a6247; }
+    .ink-s { fill: none; stroke: #8a6247; stroke-linecap: round; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .bg-f { fill: #2e2419; }
+      .ink-f { fill: #c8a184; }
+      .ink-s { fill: none; stroke: #c8a184; }
+    }
+  </style>
+  <rect class="bg-f" width="800" height="600"/>
+
+    <rect class="ink-f" x="288" y="200" width="182" height="192" rx="16"/>
+    <path class="ink-s" d="M470 252 a58 58 0 0 1 0 116" stroke-width="20"/>
+</svg>

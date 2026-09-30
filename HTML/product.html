@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aurora Desk Lamp · Northwind Supply</title>
+  <meta name="description" content="Aurora Desk Lamp — warm, dimmable light with a slim aluminium arm.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <img class="brand__mark" src="assets/brand-mark.svg" alt="" width="28" height="28">
+        Northwind Supply
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html">Shop</a></li>
+          <li>
+            <a class="cart-link" href="cart.html">
+              <img class="cart-link__icon" src="assets/icons/cart.svg" alt="" width="20" height="20">
+              <span>Cart</span>
+              <span class="cart-count" data-cart-count aria-hidden="true">0</span>
+              <span class="visually-hidden">, </span>
+              <span class="visually-hidden" data-cart-count-label>0 items</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="container">
+
+      <!-- Static stand-in for the planned /products/[id] route: one product is
+           drawn here as the worked example of the detail layout. -->
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.html">Shop</a></li>
+          <li><a href="index.html">Lighting</a></li>
+          <li><span aria-current="page">Aurora Desk Lamp</span></li>
+        </ol>
+      </nav>
+
+      <article class="detail" aria-labelledby="product-title">
+
+        <!-- Content image: the alt describes what the picture shows, which is
+             more than the adjacent heading already tells you. -->
+        <img class="detail__media" src="assets/products/aurora-desk-lamp.svg"
+             alt="A slim sand-coloured desk lamp with a folding aluminium arm and a round weighted base."
+             width="800" height="600" decoding="async">
+
+        <div class="detail__info">
+          <p class="product-card__cat">Lighting</p>
+          <h1 id="product-title">Aurora Desk Lamp</h1>
+          <p class="detail__tagline">Warm, dimmable light with a slim aluminium arm.</p>
+
+          <p class="detail__price"><span class="visually-hidden">Price: </span>79,00 €</p>
+
+          <p class="stock">
+            <span class="badge">In stock</span>
+            <span>12 available</span>
+          </p>
+
+          <p class="detail__description">
+            A minimalist desk lamp with a stepless dimmer and three colour temperatures.
+            The weighted base keeps it steady, and the folding arm folds flat for storage.
+          </p>
+
+          <!-- A real form, so Enter in the quantity field submits and adds to the
+               cart — the expected keyboard behaviour for a small form like this. -->
+          <form class="buy-form" id="buy-form">
+            <div class="field">
+              <label for="quantity">Quantity</label>
+              <div class="qty">
+                <button type="button" data-step="-1" aria-label="Decrease quantity">−</button>
+                <input id="quantity" name="quantity" type="number"
+                       value="1" min="1" max="12" step="1"
+                       inputmode="numeric" aria-describedby="quantity-hint">
+                <button type="button" data-step="1" aria-label="Increase quantity">+</button>
+              </div>
+              <p class="field__hint" id="quantity-hint">Maximum 12 per order.</p>
+              <!-- The +/- buttons change the value programmatically, which screen
+                   readers do not announce on their own. -->
+              <p class="visually-hidden" role="status" id="quantity-status"></p>
+            </div>
+            <button type="submit" class="btn btn--primary">Add to cart</button>
+          </form>
+
+          <section aria-labelledby="specs-heading">
+            <h2 id="specs-heading">Specifications</h2>
+            <dl class="specs">
+              <dt>Material</dt>
+              <dd>Anodised aluminium</dd>
+              <dt>Power</dt>
+              <dd>9 W LED</dd>
+              <dt>Colour</dt>
+              <dd>Sand</dd>
+            </dl>
+          </section>
+
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Northwind Supply — a demo storefront.</p>
+      <p>Static prototype · no orders are processed.</p>
+    </div>
+  </footer>
+
+  <p class="toast" role="status"></p>
+
+  <script src="js/store.js"></script>
+  <script>
+    (function () {
+      var PRODUCT_ID = 'aurora-desk-lamp';
+
+      var product = getProduct(PRODUCT_ID);
+      var form = document.getElementById('buy-form');
+      var input = document.getElementById('quantity');
+      var status = document.getElementById('quantity-status');
+
+      function readQty() {
+        var value = parseInt(input.value, 10);
+        if (!value || value < 1) value = 1;
+        if (value > product.stock) value = product.stock;
+        input.value = value;
+        return value;
+      }
+
+      form.querySelector('.qty').addEventListener('click', function (event) {
+        var button = event.target.closest('[data-step]');
+        if (!button) return;
+
+        input.value = (parseInt(input.value, 10) || 1) + Number(button.dataset.step);
+        status.textContent = 'Quantity: ' + readQty() + '.';
+        // Focus stays on whichever stepper was pressed, so it can be pressed again.
+      });
+
+      input.addEventListener('change', readQty);
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var qty = readQty();
+
+        cart.add(PRODUCT_ID, qty);
+        toast(qty + ' × ' + product.name + ' added to cart. Cart now has ' +
+              cart.count() + (cart.count() === 1 ? ' item.' : ' items.'));
+      });
+    })();
+  </script>
+
+</body>
+</html>
